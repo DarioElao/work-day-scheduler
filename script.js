@@ -1,28 +1,59 @@
-// Wrap all code that interacts with the DOM in a call to jQuery to ensure that
-// the code isn't run until the browser has finished rendering all the elements
-// in the html.
+//start of the function 
 $(function () {
+
     var date = dayjs();
+    //date format
     $("#currentDay").text(date.format("MMM D, YYYY"));
 
-  
-    // TODO: Add a listener for click events on the save button. This code should
-    // use the id in the containing time-block as a key to save the user input in
-    // local storage. HINT: What does `this` reference in the click listener
-    // function? How can DOM traversal be used to get the "hour-x" id of the
-    // time-block containing the button that was clicked? How might the id be
-    // useful when saving the description in local storage?
-    //
-    // TODO: Add code to apply the past, present, or future class to each time
-    // block by comparing the id to the current hour. HINTS: How can the id
-    // attribute of each time-block be used to conditionally add or remove the
-    // past, present, and future classes? How can Day.js be used to get the
-    // current hour in 24-hour time?
-    //
-    // TODO: Add code to get any user input that was saved in localStorage and set
-    // the values of the corresponding textarea elements. HINT: How can the id
-    // attribute of each time-block be used to do this?
-    //
-    // TODO: Add code to display the current date in the header of the page.
-  });
+    //function that compares time slots and assign color classes (.present, .past, .future)
+    function matchTime() {
+        var actualTime = dayjs().hour();
+      
+        $(".time-block").each(function (index, timeBox) {
+          
+          var id = timeBox.id;
+          var timeSlot = parseInt(id.split("-")[1]);
+
+          if (actualTime === timeSlot) {
+            $(this).addClass("present");
+          } else if (actualTime > timeSlot) {
+            $(this).addClass("past");
+          } else {
+            $(this).addClass("future");
+          }
+        });
+      }
+
+      //functions that saves users input on time slots
+      $(".saveBtn").on("click", function () {
+
+        //gets time slot 
+        var hourId = $(this).parent()[0].id
+       
+        //get user input
+        const userData = $(this).prev()[0].value;
+    
+        //saves user input with time slot and saves it in the local storage
+        localStorage.setItem(hourId, userData);
+      });
+      
+      //function that retrieves data from the local storage
+      $(".description").each(function(){
+        
+        
+        var textArea = $(this).parent()[0].id
+        var textValue = localStorage.getItem(textArea)
+    
+      $(this)[0].value = textValue
+    
+      })
+
+      matchTime();
+
+      });
+    
+
+
+
+
   
