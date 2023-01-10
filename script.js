@@ -40,7 +40,6 @@ $(function () {
       //function that retrieves data from the local storage
       $(".description").each(function(){
         
-        
         var textArea = $(this).parent()[0].id
         var textValue = localStorage.getItem(textArea)
     
